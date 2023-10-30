@@ -1,40 +1,27 @@
 import tkinter as tk
+from tkinter import PhotoImage
 import random
 import time
-
-app = tk.Tk()
-app.title("나때는말이야")
-
-# 윈도우 크기 설정
-app.geometry("500x300")  # 너비 x 높이
-
-# 스타일 정의
-font_style = ("Helvetica", 14)
-button_style = {
-    "padx": 10,
-    "pady": 5,
-    "font": font_style,
-}
-
-# 게임 화면으로 이동하는 함수들
-def create_game_window(title):
-    game_window = tk.Toplevel(app)
-    game_window.title(title)
-
-    # 윈도우 크기 설정
-    game_window.geometry("500x300")  # 너비 x 높이
-
-    return game_window
 
 def game1():
     game_window = create_game_window("가위바위보 게임")
 
+    user_choice = tk.StringVar()
+    computer_choice = tk.StringVar()
+    result = tk.StringVar()
+
     # 가위바위보 게임 함수
-    def play_game(user_choice):
+    def play_game():
         choices = ["가위", "바위", "보"]
-        computer_choice = random.choice(choices)
-        result = determine_winner(user_choice, computer_choice)
-        result_label.config(text=f"컴퓨터 선택: {computer_choice}\n결과: {result}")
+        computer_choice_str = random.choice(choices)
+        user_choice_str = user_choice.get()
+        computer_choice.set(computer_choice_str)
+        
+        game_label = tk.Label(game_frame, text="컴퓨터: " + computer_choice_str + " 유저: " + user_choice_str, font=font_style)
+        game_label.pack()
+
+        result_str = determine_winner(user_choice_str, computer_choice_str)
+        result.set(result_str)
 
     def determine_winner(user_choice, computer_choice):
         if user_choice == computer_choice:
@@ -48,30 +35,64 @@ def game1():
         else:
             return "컴퓨터 승리"
 
-    # 가위바위보 게임 화면 생성
-    game_label = tk.Label(game_window, text="가위바위보 게임을 시작하세요:", font=font_style)
+    # 이미지 미리 로드
+    image0 = PhotoImage(file="0.png")
+    image2 = PhotoImage(file="2.png")
+    image5 = PhotoImage(file="5.png")
+
+    # 게임 프레임 생성
+    game_frame = tk.Frame(game_window)
+    game_frame.pack()
+
+    game_label = tk.Label(game_frame, text="가위바위보 게임(가위, 바위, 보)", font=font_style)
     game_label.pack()
 
-    user_choice_entry = tk.Entry(game_window, font=font_style)
-    user_choice_entry.pack()
+    buttons_frame = tk.Frame(game_frame)
+    buttons_frame.pack()
 
-    play_button = tk.Button(game_window, text="가위바위보!", command=lambda: play_game(user_choice_entry.get()), **button_style)
+    scissors_button = tk.Button(buttons_frame, text="가위", image=image2, command=lambda: user_choice.set("가위"), **button_style)
+    scissors_button.photo = image2
+    scissors_button.pack(side="left")
+
+    rock_button = tk.Button(buttons_frame, text="바위", image=image0, command=lambda: user_choice.set("바위"), **button_style)
+    rock_button.photo = image0
+    rock_button.pack(side="left")
+
+    paper_button = tk.Button(buttons_frame, text="보", image=image5, command=lambda: user_choice.set("보"), **button_style)
+    paper_button.photo = image5
+    paper_button.pack(side="left")
+
+    play_button = tk.Button(game_frame, text="가위바위보!", command=play_game, **button_style)
     play_button.pack()
 
-    result_label = tk.Label(game_window, text="", font=font_style)
+    result_label = tk.Label(game_frame, textvariable=result, font=font_style)
     result_label.pack()
 
 def game2():
     game_window = create_game_window("주사위 굴리기 게임")
 
+    dice_images = [PhotoImage(file=f"dice_{i}.png") for i in range(1, 7)]
+
+    # Game variables
+    user_result = tk.StringVar()
+    computer_result = tk.StringVar()
+
     def roll_dice():
+        # Simulate dice rolling animation
+        for _ in range(10):
+            user_roll = random.randint(1, 6)
+            computer_roll = random.randint(1, 6)
+            user_result.set(dice_images[user_roll - 1])
+            computer_result.set(dice_images[computer_roll - 1])
+            app.update()
+            time.sleep(0.2)
+
         user_roll = random.randint(1, 6)
         computer_roll = random.randint(1, 6)
-        
-        user_result_label.config(text=f"당신의 주사위 숫자: {user_roll}")
-        computer_result_label.config(text=f"컴퓨터의 주사위 숫자: {computer_roll}")
-        
-        app.after(1000, determine_winner, user_roll, computer_roll)
+        user_result.set(dice_images[user_roll - 1])
+        computer_result.set(dice_images[computer_roll - 1])
+    
+        determine_winner(user_roll, computer_roll)
 
     def determine_winner(user_roll, computer_roll):
         if user_roll > computer_roll:
@@ -81,17 +102,17 @@ def game2():
         else:
             result_label.config(text="무승부!")
 
-    # 주사위 굴리기 게임 화면 생성
-    roll_button = tk.Button(game_window, text="주사위 굴리기", command=roll_dice, **button_style)
+    # Game UI
+    roll_button = tk.Button(app, text="주사위 굴리기", command=roll_dice, **button_style)
     roll_button.pack()
 
-    user_result_label = tk.Label(game_window, text="", font=font_style)
-    user_result_label.pack()
+    user_dice_label = tk.Label(app, image=None, textvariable=user_result)
+    user_dice_label.pack()
 
-    computer_result_label = tk.Label(game_window, text="", font=font_style)
-    computer_result_label.pack()
+    computer_dice_label = tk.Label(app, image=None, textvariable=computer_result)
+    computer_dice_label.pack()
 
-    result_label = tk.Label(game_window, text="", font=font_style)
+    result_label = tk.Label(app, text="", font=font_style)
     result_label.pack()
 
 def game3():
@@ -101,8 +122,8 @@ def game3():
         target_number = random.randint(0, 50)
         attempts = 0
 
-        message_label = tk.Label(game_window, text="0 ~ 50 사이의 숫자를 고르세요.", font=font_style)
-        message_label.pack()
+        message_label = tk.Label(game_window, text="0 ~ 50 사이의 숫자를 고르세요.", font=font_style, bg="lightyellow")
+        message_label.pack(pady=10)
         
         def check_guess():
             nonlocal attempts
@@ -112,28 +133,28 @@ def game3():
             try:
                 user_guess = int(user_guess)
             except ValueError:
-                message_label.config(text="올바른 숫자를 입력하세요.")
+                message_label.config(text="올바른 숫자를 입력하세요.", fg="red")
                 return
 
             attempts += 1
 
             if user_guess < target_number:
-                message_label.config(text="UP! 더 큰 숫자를 선택하세요.")
+                message_label.config(text="UP! 더 큰 숫자를 선택하세요.", fg="blue")
             elif user_guess > target_number:
-                message_label.config(text="DOWN! 더 작은 숫자를 선택하세요.")
+                message_label.config(text="DOWN! 더 작은 숫자를 선택하세요.", fg="blue")
             else:
-                message_label.config(text=f"정답! {attempts}번만에 맞췄습니다.")
+                message_label.config(text=f"정답! {attempts}번만에 맞췄습니다.", fg="green")
                 user_input.config(state="disabled")
                 check_button.config(state="disabled")
 
         user_input = tk.Entry(game_window, font=font_style)
-        user_input.pack()
+        user_input.pack(pady=10)
         
         check_button = tk.Button(game_window, text="확인", command=check_guess, **button_style)
-        check_button.pack()
+        check_button.pack(pady=10)
         
         message_label = tk.Label(game_window, text="", font=font_style)
-        message_label.pack()
+        message_label.pack(pady=20)
 
     play_updown_game()
 
@@ -176,21 +197,62 @@ def game4():
 
     play_fruit_game()
 
-# 레이블 생성
-game_label = tk.Label(app, text="나때는 말이야!!", font=font_style)
-game_label.grid(row=0, column=0, columnspan=4)  # 레이블을 4열로 확장
+app = tk.Tk()
+app.title("나때는말이야")
+
+# 윈도우 크기 설정
+app.geometry("1000x560")
+app.resizable(False, False)
+
+# 이미지 보여주기
+background_image = tk.PhotoImage(file="TitleScene.png")
+background_label = tk.Label(app, image=background_image)
+background_label.place(x=0, y=0, relwidth=1, relheight=1)
+
+# 스타일 정의
+font_style = ("Helvetica", 22)
+button_style = {
+    "padx": 0,
+    "pady": 0,
+    "font": font_style,
+}
+
+# 게임 화면으로 이동하는 함수들
+def create_game_window(title):
+    game_window = tk.Toplevel(app)
+    game_window.title(title)
+
+    # 윈도우 크기 설정
+    game_window.geometry("1000x560")  # 너비 x 높이
+    game_window.resizable(False, False)
+    background_label.place(x=0, y=0, relwidth=1, relheight=1)
+
+    return game_window
+
+
+# 타이틀 생성
+title_font = ("Helvetica", 50) 
+game_label = tk.Label(app, text="으라차차", font=title_font)
+
+game_label.pack(pady=90) 
+
+button_frame = tk.Frame(app)
+button_frame.pack()
+
+# 버튼 이미지
+button_image = tk.PhotoImage(file="back_button.png")
 
 # 버튼 생성
-button1 = tk.Button(app, text="가위바위보", command=game1, **button_style)
-button2 = tk.Button(app, text="주사위", command=game2, **button_style)
-button3 = tk.Button(app, text="UPDOWN", command=game3, **button_style)
-button4 = tk.Button(app, text="과일 스무고개", command=game4, **button_style)
+button1 = tk.Button(button_frame, image=button_image, width=500, height=70, text="가위바위보", bd=0, highlightthickness=0, command=game1, **button_style, fg="white", compound="center")
+button2 = tk.Button(button_frame, image=button_image, width=500, height=70, text="주사위", bd=0, highlightthickness=0, command=game2, **button_style, fg="white", compound="center")
+button3 = tk.Button(button_frame, image=button_image, width=500, height=70, text="UPDOWN", bd=0, highlightthickness=0, command=game3, **button_style, fg="white", compound="center")
+button4 = tk.Button(button_frame, image=button_image, width=500, height=70, text="과일 스무고개", bd=0, highlightthickness=0, command=game4, **button_style, fg="white", compound="center")
 
-# 버튼을 가로로 배치하기 위해 grid 사용
-button1.grid(row=1, column=0)
-button2.grid(row=1, column=1)
-button3.grid(row=1, column=2)
-button4.grid(row=1, column=3)
+# 버튼을 세로로 배치하기 위해 pack 사용
+button1.pack()
+button2.pack()
+button3.pack()
+button4.pack()
 
 # 애플리케이션 실행
 app.mainloop()
