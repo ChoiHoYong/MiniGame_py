@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import PhotoImage
 import random
 import time
-import pygame
+import os
 
 def game1():
     game_window = create_game_window("가위바위보 게임")
@@ -24,7 +24,6 @@ def game1():
         choices = ["가위", "바위", "보"]
         computer_choice_str = random.choice(choices)
 
-        # user_choice_str = user_choice.get()
         computer_choice.set(computer_choice_str)
         
         game_label = tk.Label(game_frame, text="컴퓨터: " + computer_choice_str + " 유저: " + user_choice_str, font=font_style)
@@ -32,6 +31,7 @@ def game1():
 
         result_str = determine_winner(user_choice_str, computer_choice_str)
         result.set(result_str)
+        play_button.config(state="disabled")
 
     def determine_winner(user_choice, computer_choice):
         if user_choice == computer_choice:
@@ -45,10 +45,9 @@ def game1():
         else:
             return "컴퓨터 승리"
 
-    # 이미지 미리 로드
-    image0 = PhotoImage(file="0.png")
-    image2 = PhotoImage(file="2.png")
-    image5 = PhotoImage(file="5.png")
+    image0 = PhotoImage(file=os.path.join(script_directory, '0.png'))
+    image2 = PhotoImage(file=os.path.join(script_directory, '2.png'))
+    image5 = PhotoImage(file=os.path.join(script_directory, '5.png'))
 
     # 게임 프레임 생성
     game_frame = tk.Frame(game_window)
@@ -70,7 +69,7 @@ def game1():
         # 현재 선택한 버튼에 스타일 추가
         button.config(borderwidth=3, relief="solid", bg="green")
 
-        selected_button = button  # 선택한 버튼을 저장
+        selected_button = button 
         user_choice.set(choice)
 
     scissors_button = tk.Button(buttons_frame, text="가위", image=image2, command=lambda: select_choice("가위", scissors_button), **button_style)
@@ -97,27 +96,64 @@ def game2():
     game_label = tk.Label(game_window, text="주사위 게임(1~6)", font=font_style)
     game_label.pack()
 
+    user_roll = random.randint(1, 6)
+    computer_roll = random.randint(1, 6)
+
     def roll_dice():
-        user_roll = random.randint(1, 6)
-        computer_roll = random.randint(1, 6)
+        roll_button1.forget()
         
         user_result_label.config(text=f"유저의 주사위 숫자: {user_roll}", font=("Helvetica", 22))
-        computer_result_label.config(text=f"컴퓨터의 주사위 숫자: {computer_roll}", font=("Helvetica", 22))
-        
-        time.sleep(1)  # 1초 딜레이
+        computer_result_label.config(text=f"컴퓨터의 주사위 숫자: {computer_roll}", font=("Helvetica", 22))        
         
         if user_roll > computer_roll:
             result_label.config(text="유저가 이겼습니다!", font=("Helvetica", 22))
+            # roll_button.config(state="disabled")
         elif user_roll < computer_roll:
             result_label.config(text="컴퓨터가 이겼습니다!", font=("Helvetica", 22))
+            # roll_button.config(state="disabled")
         else:
             result_label.config(text="무승부!", font=("Helvetica", 22))
+            # roll_button.config(state="disabled")
 
-    image = PhotoImage(file="dice_2.png")
-    roll_button = tk.Button(game_window, text="주사위 굴리기", image=image, command=roll_dice)
-    roll_button.photo = image  # 이미지를 버튼에 할당
-    roll_button.pack()
+        if user_roll == 1:
+            image1 = PhotoImage(file=os.path.join(script_directory, 'dice_1.png'))
+        elif user_roll == 2:
+            image1 = PhotoImage(file=os.path.join(script_directory, 'dice_2.png'))
+        elif user_roll == 3:
+            image1 = PhotoImage(file=os.path.join(script_directory, 'dice_3.png'))
+        elif user_roll == 4:
+            image1 = PhotoImage(file=os.path.join(script_directory, 'dice_4.png'))
+        elif user_roll == 5:
+            image1 = PhotoImage(file=os.path.join(script_directory, 'dice_5.png'))
+        elif user_roll == 6:
+            image1 = PhotoImage(file=os.path.join(script_directory, 'dice_6.png'))
 
+    
+        roll_button = tk.Button(game_window, text="주사위 굴리기", image=image1)
+        roll_button.photo = image1
+        roll_button.pack()    
+               
+
+
+    random_roll = random.randint(1, 6)
+
+    if random_roll == 1:
+        image1 = PhotoImage(file=os.path.join(script_directory, 'dice_1.png'))
+    elif random_roll == 2:
+        image1 = PhotoImage(file=os.path.join(script_directory, 'dice_2.png'))
+    elif random_roll == 3:
+        image1 = PhotoImage(file=os.path.join(script_directory, 'dice_3.png'))
+    elif random_roll == 4:
+        image1 = PhotoImage(file=os.path.join(script_directory, 'dice_4.png'))
+    elif random_roll == 5:
+        image1 = PhotoImage(file=os.path.join(script_directory, 'dice_5.png'))
+    elif random_roll == 6:
+        image1 = PhotoImage(file=os.path.join(script_directory, 'dice_6.png'))
+
+    roll_button1 = tk.Button(game_window, text="주사위 굴리기", image=image1, command=roll_dice)
+    roll_button1.photo = image1
+    roll_button1.pack()
+    
 
     user_result_label = tk.Label(game_window, text="", font=("Helvetica", 20))
     user_result_label.pack()
@@ -138,8 +174,35 @@ def game3():
         message_label = tk.Label(game_window, text="0 ~ 50 사이의 숫자를 고르세요.", font=font_style)
         message_label.pack(pady=10)
         
+        # 이미지 파일 경로
+        # up_image_path = "/up.png"
+        # down_image_path = "/down.png"
+        # clap_image_path = "/clap.png"
+
+        # UP 이미지 위젯
+        up_image = tk.PhotoImage(file=os.path.join(script_directory, 'up.png'))
+        rock_button1 = tk.Label(game_window, image=up_image)
+        rock_button1.photo = up_image
+        rock_button1.pack(ipady=20)
+        rock_button1.pack_forget()
+
+        # DOWN 이미지 위젯
+        down_image = tk.PhotoImage(file=os.path.join(script_directory, 'down.png'))
+        rock_button2 = tk.Label(game_window, image=down_image)
+        rock_button2.photo = down_image
+        rock_button2.pack(ipady=20)
+        rock_button2.pack_forget()  # 처음에 DOWN 이미지 숨김
+
+        # CLAP 이미지 위젯
+        clap_image = tk.PhotoImage(file=os.path.join(script_directory, 'clap.png'))
+        rock_button3 = tk.Label(game_window, image=clap_image)
+        rock_button3.photo = clap_image
+        rock_button3.pack(ipady=20)
+        rock_button3.pack_forget()  # 처음에 DOWN 이미지 숨김
+
         def check_guess():
             nonlocal attempts
+
             user_guess = user_input.get()
             user_input.delete(0, "end")
             
@@ -153,12 +216,21 @@ def game3():
 
             if user_guess < target_number:
                 message_label.config(text="UP! 더 큰 숫자를 선택하세요.", fg="blue")
+                rock_button1.pack()  # UP 이미지 표시
+                rock_button2.pack_forget()  # DOWN 이미지 숨김
+                
             elif user_guess > target_number:
                 message_label.config(text="DOWN! 더 작은 숫자를 선택하세요.", fg="blue")
+                rock_button1.pack_forget()  # UP 이미지 숨김
+                rock_button2.pack()  # DOWN 이미지 표시             
+                
             else:
                 message_label.config(text=f"정답! {attempts}번만에 맞췄습니다.", fg="green")
                 user_input.config(state="disabled")
                 check_button.config(state="disabled")
+                rock_button1.pack_forget()  # UP 이미지 숨김
+                rock_button2.pack_forget()  # DOWN 이미지 숨김
+                rock_button3.pack()  # CLAP 이미지 표시 
 
         user_input = tk.Entry(game_window, font=font_style)
         user_input.pack(pady=10)
@@ -178,7 +250,7 @@ def game4():
         fruits = {
         "사과": ["빨간색이며 원형입니다", "맛있는 과일 중 하나입니다", "고요한 계절에 자라는 과일입니다"],
         "딸기": ["작고 빨간색이며 씨가 밖으로 돌출돼 있습니다", "아이스크림에 자주 올려먹는 과일입니다", "딸기잼으로도 많이 쓰입니다"],
-        "포도": ["작고 둥글며 보라색 또는 초록색입니다", "포도주로 만들어지는 과일입니다", "큰 손에 들어가는 것이 어려운 크기입니다"],
+        "포도": ["작고 둥글며 보라색 또는 초록색입니다", "포도주로 만들어지는 과일입니다", "안씹어도 먹을 수 있습니다"],
         "귤": ["오렌지색이며 작고 동그란 모양입니다", "겉 껍질을 까야 속을 먹을 수 있습니다", "겉 껍질이 두껍게 나 있습니다"],
         "배": ["노란색 또는 녹색이며 오각형입니다", "부드럽고 달콤한 맛을 가진 과일입니다", "아침식사에 자주 먹는 과일 중 하나입니다"]
     }
@@ -194,24 +266,42 @@ def game4():
 
         attempts = 0  # 시도 횟수를 추적하는 변수
 
+        imagebox = PhotoImage(file=os.path.join(script_directory, 'box.png'))
+        # clapimage = "/clap.png"
+
+        rock_button = tk.Label(game_window, image=imagebox)
+        rock_button.photo = imagebox
+
+        clap_image = tk.PhotoImage(file=os.path.join(script_directory, 'clap.png'))
+        rock_button3 = tk.Label(game_window, image=clap_image)
+        rock_button3.photo = clap_image
+        
+
         def check_guess():
             nonlocal attempts
             user_guess = user_input.get().strip().lower()
             user_input.delete(0, "end")
+            
+            
 
             if user_guess == target_fruit:
-                message_label.config(text=f"정답! {target_fruit}입니다.")
+                message_label.config(text=f"정답! {target_fruit}입니다.", fg="green")
                 user_input.config(state="disabled")
                 check_button.config(state="disabled")
+                rock_button.pack_forget()
+                rock_button3.pack()
             else:
                 if not target_features:
-                    message_label.config(text=f"정답은 {target_fruit}입니다.")
+                    message_label.config(text=f"정답은 {target_fruit}입니다.", fg="green")
                     user_input.config(state="disabled")
                     check_button.config(state="disabled")
+                    rock_button.pack_forget()
+                                      
                 else:
                     new_feature = random.choice(target_features)
                     target_features.remove(new_feature)
-                    message_label.config(text=f"아닙니다 ㅠㅠ\n{new_feature}")
+                    message_label.config(text=f"아닙니다 ㅠㅠ\n{new_feature}",fg="red")  
+
                 attempts += 1
 
         user_input = tk.Entry(game_window, font=font_style)
@@ -220,15 +310,20 @@ def game4():
         check_button = tk.Button(game_window, text="확인", command=check_guess, **button_style)
         check_button.pack()
 
+        rock_button.pack(ipady=20)
+
     play_fruit_game()
 
 # 스타일 정의
 font_style = ("Helvetica", 22)
 button_style = {
-    "padx": 0,
-    "pady": 0,
+    #"padx": 0,
+    #"pady": 0,
     "font": font_style,
 }
+
+# 현재 스크립트 파일의 디렉토리를 얻기
+script_directory = os.path.dirname(os.path.abspath(__file__))
 
 app = tk.Tk()
 app.title("나때는말이야")
@@ -238,7 +333,7 @@ app.geometry("1000x560")
 app.resizable(False, False)
 
 # 이미지 보여주기
-background_image = tk.PhotoImage(file="back_main.png")
+background_image = tk.PhotoImage(file=os.path.join(script_directory, 'back_main.png'))
 background_label = tk.Label(app, image=background_image)
 background_label.place(x=0, y=0, relwidth=1, relheight=1)
 
@@ -251,8 +346,8 @@ def create_game_window(title):
     game_window.geometry("1000x560")  # 너비 x 높이
     game_window.resizable(False, False)
 
-     # 배경 이미지를 PhotoImage로 로드
-    background_image = tk.PhotoImage(file="back_main.png")
+    # 배경 이미지를 PhotoImage로 로드
+    background_image = tk.PhotoImage(file=os.path.join(script_directory, 'back_main.png'))
 
     # 배경 이미지를 표시할 Label 생성
     background_label = tk.Label(game_window, image=background_image)
@@ -261,7 +356,7 @@ def create_game_window(title):
     return game_window
 
 # 버튼 이미지
-button_image = tk.PhotoImage(file="back_button.png")
+button_image = tk.PhotoImage(file=os.path.join(script_directory, 'back_button.png'))
 
 # 타이틀 생성
 title_font = ("Helvetica", 50) 
