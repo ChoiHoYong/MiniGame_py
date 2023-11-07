@@ -2,7 +2,13 @@ import tkinter as tk
 from tkinter import PhotoImage
 import random
 import time
+<<<<<<< HEAD
 import os
+=======
+
+import matplotlib.pyplot as plt
+from matplotlib.font_manager import FontProperties
+>>>>>>> 674639bdd10378eff9a20808bd1d844aed1c6bb6
 
 def game1():
     game_window = create_game_window("가위바위보 게임")
@@ -45,9 +51,15 @@ def game1():
         else:
             return "컴퓨터 승리"
 
+<<<<<<< HEAD
     image0 = PhotoImage(file=os.path.join(script_directory, '0.png'))
     image2 = PhotoImage(file=os.path.join(script_directory, '2.png'))
     image5 = PhotoImage(file=os.path.join(script_directory, '5.png'))
+=======
+    image0 = PhotoImage(file="D:/HoYong/Github/MiniGame_py/0.png")
+    image2 = PhotoImage(file="D:/HoYong/Github/MiniGame_py/2.png")
+    image5 = PhotoImage(file="D:/HoYong/Github/MiniGame_py/5.png")
+>>>>>>> 674639bdd10378eff9a20808bd1d844aed1c6bb6
 
     # 게임 프레임 생성
     game_frame = tk.Frame(game_window)
@@ -103,6 +115,7 @@ def game2():
         roll_button1.forget()
         
         user_result_label.config(text=f"유저의 주사위 숫자: {user_roll}", font=("Helvetica", 22))
+<<<<<<< HEAD
         computer_result_label.config(text=f"컴퓨터의 주사위 숫자: {computer_roll}", font=("Helvetica", 22))        
         
         if user_roll > computer_roll:
@@ -127,6 +140,26 @@ def game2():
             image1 = PhotoImage(file=os.path.join(script_directory, 'dice_5.png'))
         elif user_roll == 6:
             image1 = PhotoImage(file=os.path.join(script_directory, 'dice_6.png'))
+=======
+        computer_result_label.config(text=f"컴퓨터의 주사위 숫자: {computer_roll}", font=("Helvetica", 22))
+        
+        # time.sleep(1)
+        
+        if user_roll > computer_roll:
+            result_label.config(text="유저가 이겼습니다!", font=("Helvetica", 22))
+            roll_button.config(state="disabled")
+        elif user_roll < computer_roll:
+            result_label.config(text="컴퓨터가 이겼습니다!", font=("Helvetica", 22))
+            roll_button.config(state="disabled")
+        else:
+            result_label.config(text="무승부!", font=("Helvetica", 22))
+            roll_button.config(state="disabled")
+
+    image = PhotoImage(file="D:/HoYong/Github/MiniGame_py/dice_2.png")
+    roll_button = tk.Button(game_window, text="주사위 굴리기", image=image, command=roll_dice)
+    roll_button.photo = image
+    roll_button.pack()
+>>>>>>> 674639bdd10378eff9a20808bd1d844aed1c6bb6
 
     
         roll_button = tk.Button(game_window, text="주사위 굴리기", image=image1)
@@ -295,6 +328,7 @@ def game4():
                     message_label.config(text=f"정답은 {target_fruit}입니다.", fg="green")
                     user_input.config(state="disabled")
                     check_button.config(state="disabled")
+<<<<<<< HEAD
                     rock_button.pack_forget()
                                       
                 else:
@@ -302,6 +336,13 @@ def game4():
                     target_features.remove(new_feature)
                     message_label.config(text=f"아닙니다 ㅠㅠ\n{new_feature}",fg="red")  
 
+=======
+                    image = PhotoImage(file="D:/HoYong/Github/MiniGame_py/dice_2.png")                   
+                else:
+                    new_feature = random.choice(target_features)
+                    target_features.remove(new_feature)
+                    message_label.config(text=f"아닙니다 ㅠㅠ\n{new_feature}",fg="red")
+>>>>>>> 674639bdd10378eff9a20808bd1d844aed1c6bb6
                 attempts += 1
 
         user_input = tk.Entry(game_window, font=font_style)
@@ -333,7 +374,11 @@ app.geometry("1000x560")
 app.resizable(False, False)
 
 # 이미지 보여주기
+<<<<<<< HEAD
 background_image = tk.PhotoImage(file=os.path.join(script_directory, 'back_main.png'))
+=======
+background_image = tk.PhotoImage(file="D:/HoYong/Github/MiniGame_py/back_main.png")
+>>>>>>> 674639bdd10378eff9a20808bd1d844aed1c6bb6
 background_label = tk.Label(app, image=background_image)
 background_label.place(x=0, y=0, relwidth=1, relheight=1)
 
@@ -346,8 +391,13 @@ def create_game_window(title):
     game_window.geometry("1000x560")  # 너비 x 높이
     game_window.resizable(False, False)
 
+<<<<<<< HEAD
     # 배경 이미지를 PhotoImage로 로드
     background_image = tk.PhotoImage(file=os.path.join(script_directory, 'back_main.png'))
+=======
+     # 배경 이미지를 PhotoImage로 로드
+    background_image = tk.PhotoImage(file="D:/HoYong/Github/MiniGame_py/back_main.png")
+>>>>>>> 674639bdd10378eff9a20808bd1d844aed1c6bb6
 
     # 배경 이미지를 표시할 Label 생성
     background_label = tk.Label(game_window, image=background_image)
@@ -356,7 +406,11 @@ def create_game_window(title):
     return game_window
 
 # 버튼 이미지
+<<<<<<< HEAD
 button_image = tk.PhotoImage(file=os.path.join(script_directory, 'back_button.png'))
+=======
+button_image = tk.PhotoImage(file="D:/HoYong/Github/MiniGame_py/back_button.png")
+>>>>>>> 674639bdd10378eff9a20808bd1d844aed1c6bb6
 
 # 타이틀 생성
 title_font = ("Helvetica", 50) 
